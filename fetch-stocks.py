@@ -1,7 +1,7 @@
 import yfinance as yf
 import pandas as pd
 import numpy as np
-import ta  # for technical indicators
+import ta  
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import classification_report, confusion_matrix, roc_auc_score
@@ -16,8 +16,8 @@ from datetime import datetime
 TICKERS = ['CBA.AX', 'BHP.AX', 'CSL.AX', 'WBC.AX', 'NAB.AX']
 RETURN_THRESHOLD = 0.02  # 2% return threshold for buy signal
 PREDICTION_PROBABILITY_THRESHOLD = 0.6  # Minimum probability to consider a buy signal
-LOOKBACK_YEARS = 3  # Fetch more historical data
-DATA_INTERVAL = "1wk"  # Weekly data
+LOOKBACK_YEARS = 10  # Fetch more historical data
+DATA_INTERVAL = "1d"  # Weekly data
 RANDOM_STATE = 42
 
 def fetch_and_prepare_data(tickers, period=f"{LOOKBACK_YEARS}y", interval=DATA_INTERVAL):
@@ -144,7 +144,7 @@ def train_improved_model(weekly_data):
     rf = RandomForestClassifier(random_state=RANDOM_STATE)
     grid_search = GridSearchCV(
         estimator=rf,
-        param_grid=simple_param_grid,  # Use simple_param_grid for faster execution
+        param_grid=param_grid,  # Use simple_param_grid for faster execution
         cv=3,
         scoring='f1',  # Focus on F1 score to balance precision and recall
         n_jobs=-1
