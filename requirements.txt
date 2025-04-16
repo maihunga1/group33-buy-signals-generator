@@ -1,3 +1,4 @@
+backtrader==1.9.78.123
 beautifulsoup4==4.13.3
 certifi==2025.1.31
 charset-normalizer==3.4.1
@@ -18,11 +19,14 @@ pandas==2.2.3
 peewee==3.17.9
 pillow==11.1.0
 platformdirs==4.3.7
+pyaml==25.1.0
 pyparsing==3.2.3
 python-dateutil==2.9.0.post0
 pytz==2025.2
+PyYAML==6.0.2
 requests==2.32.3
 scikit-learn==1.6.1
+scikit-optimize==0.10.2
 scipy==1.15.2
 seaborn==0.13.2
 six==1.17.0
