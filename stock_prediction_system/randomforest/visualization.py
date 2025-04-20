@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 import numpy as np
+from sklearn.metrics import confusion_matrix
 from feature_engineering import get_feature_columns
 from utils import get_plot_path
 
@@ -25,9 +26,12 @@ def plot_feature_importance(model):
     """Plot feature importance"""
     plt.figure(figsize=(10, 8))
     features = get_feature_columns()
+
+    rf_model = model.named_steps['randomforestclassifier']
+
     feature_importance = pd.DataFrame({
         'Feature': features,
-        'Importance': model.feature_importances_
+        'Importance': rf_model.feature_importances_
     }).sort_values('Importance', ascending=False)
     
     sns.barplot(x='Importance', y='Feature', data=feature_importance)

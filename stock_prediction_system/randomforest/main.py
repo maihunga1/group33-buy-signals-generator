@@ -9,6 +9,7 @@ from visualization import (plot_confusion_matrix, plot_feature_importance,
 from backtest_engine import prepare_backtrader_data, run_backtest
 from utils import generate_report
 from config import TICKERS, PREDICTION_PROBABILITY_THRESHOLD
+import joblib
 import os
 
 def main():
@@ -31,12 +32,14 @@ def main():
         model_data = train_model(weekly_data)
         
         # Step 3: Generate current predictions
+        # model_data = joblib.load('models/stock_prediction_model.pkl')
         latest_predictions = generate_predictions(model_data, weekly_data)
         print("\n📈 Current Week Predictions:")
         print(latest_predictions[['Ticker', 'Close', 'Buy_Probability', 'Recommendation']])
         
         # Step 4: Create visualizations
         visualizations = {
+            'feature_importance': plot_feature_importance(model_data['model']),
             'current_predictions': plot_current_predictions(latest_predictions, PREDICTION_PROBABILITY_THRESHOLD),
             'historical_analysis': plot_historical_analysis(weekly_data, latest_predictions),
             'feature_correlation': plot_feature_correlation(weekly_data)
@@ -58,3 +61,30 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# def main():
+#     try:
+#         # Load data and model
+#         weekly_data = pd.read_csv('data/processed/processed_data.csv')
+#         model_data = joblib.load('models/stock_prediction_model.pkl')
+        
+#         # Generate predictions with rationale
+#         predictions = generate_predictions(model_data, weekly_data)
+        
+#         # Print results
+#         print("\n📈 Stock Predictions with Rationale:")
+#         for _, row in predictions.iterrows():
+#             print(f"\n{row['Ticker']} - ${row['Close']:.2f}")
+#             print(f"Recommendation: {row['Recommendation']}")
+#             print(f"Rationale: {row['Rationale']}")
+        
+#         # Save to CSV
+#         predictions[['Ticker', 'Close', 'Recommendation', 'Rationale']].to_csv(
+#             'results/current_predictions.csv', index=False)
+#         print("\n💾 Saved predictions to results/current_predictions.csv")
+        
+#     except Exception as e:
+#         print(f"❌ Error: {e}")
+
+# if __name__ == "__main__":
+#     main()

@@ -98,6 +98,8 @@ def train_model(data):
     model_data = {
         'model': best_model,
         'features': features,
+        'y_test': y_test,
+        'y_pred': y_pred,
         'threshold': RETURN_THRESHOLD,
         'training_date': datetime.now().strftime('%Y-%m-%d'),
     }
