@@ -41,6 +41,18 @@ def fetch_and_calculate(tickers, period=f"{LOOKBACK_YEARS}y", interval=DATA_INTE
             df['Price_Change'] = df['Close'].pct_change()
             df['Price_MA_Ratio'] = df['Close'] / df['SMA_20']
             
+            # 1. Volume change over 5 days
+            df['Volume_5D_Avg'] = df['Volume'].rolling(window=5).mean()
+            df['Volume_Change'] = df['Volume'] / df['Volume_5D_Avg']
+
+            # 2. Return over 5 and 20 days
+            df['Return_5D'] = df['Close'].pct_change(periods=5)
+            df['Return_20D'] = df['Close'].pct_change(periods=20)
+
+            # 3. MA Crossover signal (1 if EMA_12 > EMA_26 else 0)
+            df['MA_Crossover_12_26'] = (df['EMA_12'] > df['EMA_26']).astype(int)
+
+            
             # Add ticker column
             df['Ticker'] = ticker
             all_data.append(df)

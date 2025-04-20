@@ -62,7 +62,24 @@ def create_labels(df, threshold=0.05, remove_uncertain=True):
 combined_data = create_labels(combined_data)
 
 # Preparing features and labels for training
-features = ['Price_Change', 'SMA_20', 'RSI', 'ATR', 'Price_MA_Ratio']
+features = [
+    'Price_Change',        # Daily return
+    'SMA_20',              # 20-day Simple Moving Average
+    'RSI',                 # Relative Strength Index (Momentum)
+    'ATR',                 # Average True Range (Volatility)
+    'Price_MA_Ratio',      # Price vs SMA ratio (Trend)
+    'MACD',                # MACD line (Trend strength)
+    'MACD_Signal',         # MACD signal line
+    'MACD_Diff',           # MACD difference (bullish/bearish momentum)
+    'Stoch',               # Stochastic Oscillator (momentum)
+    'Stoch_Signal',        # Stochastic signal
+    'Volume_Change',       # Volume spike or drop (sentiment)
+    'OBV',                 # On-Balance Volume (volume direction)
+    'Return_5D',           # 5-day return (momentum)
+    'Return_20D',          # 20-day return (medium-term momentum)
+    'BB_Width',            # Bollinger Band width (volatility expansion)
+    'MA_Crossover_12_26'   # EMA crossover binary flag (trend shift)
+]
 X = combined_data[features]
 y = combined_data['Label']
 
