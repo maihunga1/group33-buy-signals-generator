@@ -101,6 +101,8 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.myenv/
+myenv/
 
 # Spyder project settings
 .spyderproject
@@ -129,3 +131,4 @@ cython_debug/
 # Ignore all CSV files
 *.csv
 *.pkl
+*.png
