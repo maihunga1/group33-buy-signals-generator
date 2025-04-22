@@ -88,7 +88,6 @@ def generate_report(latest_predictions, backtest_results, visualizations, model_
             <h3>{row['Ticker']}</h3>
             <p><strong>Recommendation:</strong> {row['Recommendation']}</p>
             <p><strong>Buy Probability:</strong> {row['Buy_Probability']:.2%}</p>
-            <p><strong>Current Price:</strong> ${row['Close']:.2f}</p>
             <p><strong>RSI:</strong> {row['RSI']:.2f}</p>
             <p><strong>MACD:</strong> {row['MACD']:.4f}</p>
         </div>

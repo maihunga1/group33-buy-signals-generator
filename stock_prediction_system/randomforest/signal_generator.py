@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-import shap
 from config import PREDICTION_PROBABILITY_THRESHOLD
 from shap_rationale import generate_shap_rationale  # Assuming this function exists
 
@@ -12,7 +11,7 @@ def generate_predictions(model_data, data):
     model = model_data['model']
     features = list(model_data['features'])  # ensure it's a list
 
-    # Extract the RandomForestClassifier from the pipeline
+    # Extract the RandomForestClassifier from the pipeline if needed
     if hasattr(model, 'named_steps') and 'randomforestclassifier' in model.named_steps:
         rf_model = model.named_steps['randomforestclassifier']
     else:
@@ -31,16 +30,24 @@ def generate_predictions(model_data, data):
                   'Avoid'
     )
 
+    # Create empty columns for results
     latest['Top_3_Features'] = ""
     latest['Rationale'] = ""
 
+    # Process each ticker individually
     for idx, row in latest.iterrows():
-        # Ensure row is passed as DataFrame with correct column names
-        X_row = pd.DataFrame([row[features].values], columns=features)
+        # Create a DataFrame for just this single ticker
+        X_row = pd.DataFrame([row[features]], columns=features)
+        
+        # Generate SHAP values for this specific ticker
         top_features, rationale = generate_shap_rationale(rf_model, X_row, features, top_n=3)
+        
+        # Format the top features as a string
         top_factor_analysis = [f"{feature}: {shap_val:+.4f}" for feature, shap_val in top_features]
         latest.at[idx, 'Top_3_Features'] = "\n• " + "\n• ".join(top_factor_analysis)
-        latest.at[idx, 'Rationale'] = rationale
+        
+        # Store the rationale
+        latest.at[idx, 'Rationale'] = "\n".join(rationale)
 
+    # Return the results
     return latest[['Ticker', 'Buy_Prediction', 'Buy_Probability', 'Recommendation', 'Top_3_Features', 'Rationale']]
-

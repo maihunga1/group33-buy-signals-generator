@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 from itertools import cycle
 from io import StringIO  # Assuming you need io for something like csv loading
 from utils import get_result_path
+from risk_management import PositionSizing, RiskAssessor, StopLossCalculator
 
 # Scikit-learn
 from sklearn.ensemble import RandomForestClassifier
@@ -67,6 +68,8 @@ class MLPredictionStrategy(bt.Strategy):
     )
     
     def __init__(self):
+        self.position_sizer = PositionSizing()
+        self.risk_assessor = RiskAssessor()
         self.orders = {}
         self.stop_orders = {}
         self.profit_orders = {}
@@ -93,7 +96,12 @@ class MLPredictionStrategy(bt.Strategy):
             
             if d.buy_prob[0] >= self.p.prob_threshold and d.buy_signal[0] == 1:
                 value = self.broker.getvalue()
-                size = int((value * self.p.position_size) / d.close[0])
+                size = self.position_sizer.calculate_size(
+                    portfolio_value=self.broker.getvalue(),
+                    entry_price=d.close[0],
+                    stop_loss=d.close[0] * (1 - self.p.stop_loss),
+                    volatility=d.atr[0] if hasattr(d, 'atr') else None
+                )
                 
                 if size > 0:
                     self.log(f'BUY CREATE - {ticker} at {d.close[0]:.2f}')

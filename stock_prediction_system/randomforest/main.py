@@ -35,7 +35,7 @@ import os
 #         # model_data = joblib.load('models/stock_prediction_model.pkl')
 #         latest_predictions = generate_predictions(model_data, weekly_data)
 #         print("\n📈 Current Week Predictions:")
-#         print(latest_predictions[['Ticker', 'Close', 'Buy_Probability', 'Recommendation']])
+#         print(latest_predictions[['Ticker', 'Buy_Probability', 'Recommendation', 'Top_3_Features', 'Rationale']])
         
 #         # Step 4: Create visualizations
 #         visualizations = {
